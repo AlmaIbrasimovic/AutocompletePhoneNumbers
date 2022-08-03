@@ -2,18 +2,21 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.demo.DTO.PhoneNumbersDTO;
 import com.example.demo.model.PhoneNumbers;
 import com.example.demo.model.SearchHistory;
 import com.example.demo.repository.PhoneNumbersRepository;
 import com.example.demo.repository.SearchHistoryRepository;
+import com.example.demo.utils.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class PhoneNumbersService {
@@ -27,18 +30,9 @@ public class PhoneNumbersService {
 
     public List<PhoneNumbersDTO> autocompletePhoneNumber (String phoneNumberQuery) {
         List<PhoneNumbers> phoneNumbers = phoneNumbersRepository.findByPhoneNumber (phoneNumberQuery);
-        List<PhoneNumbersDTO> result = new ArrayList<PhoneNumbersDTO>();
-        for (PhoneNumbers phoneNumber:phoneNumbers) {
-            PhoneNumbersDTO temp = new PhoneNumbersDTO (phoneNumber.getName(), phoneNumber.getPhoneNumber());
-            result.add(temp);
-        }
-
-        return result;
+        return Mapping.mapPhoneNumberListToDTO(phoneNumbers);
     }
 
-    public void saveSearchHistory (SearchHistory searchHistory) {
-
-    }
     public List<PhoneNumbers> getAllPhoneNumbers (Integer page, Integer pageSize, String sort) {
         Pageable paging;
         if (sort != null) {
