@@ -8,7 +8,6 @@ import com.example.demo.model.SearchRequest;
 import com.example.demo.service.PhoneNumbersService;
 import com.example.demo.service.SearchHistoryService;
 import com.example.demo.utils.Mapping;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +41,14 @@ public class PhoneNumbersController {
         long executionTime = (endTime - startTime);
         SearchHistory searchHistory = new SearchHistory(query, response.toString(), currentDate.toString(), executionTime);
         searchHistoryService.saveSearchHistory(searchHistory);
-        List<PhoneNumbersDTO> listCar = objectMapper.readValue(response, new TypeReference<List<PhoneNumbersDTO>>(){});
         return new PhoneNumbersContent(phoneNumbersList);
     }
 
     @GetMapping("phone-numbers/autocomplete/history")
     @ApiOperation(value = "Retriving search history")
-    public ResponseEntity<List<SearchHistoryDTO>> retrieveSearchHistory (@RequestParam(required = false) String name, @RequestParam(required = false) String phoneNumber, @RequestParam(required = false) String query, @RequestParam(required = false) LocalDate date, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort) {
-        if (sort == null) sort = "name";
+    public ResponseEntity<List<SearchHistoryDTO>> retrieveSearchHistory (@RequestParam(required = false) String name, @RequestParam(required = false) String phoneNumber, @RequestParam(required = false) String query, @RequestParam(required = false) String date, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort) {
         SearchRequest searchRequest = new SearchRequest(name, phoneNumber, query, date, page, pageSize, sort);
         List<SearchHistory> searchHistoryList = searchHistoryService.getSearchHistory(searchRequest);
-        return new  ResponseEntity<>(Mapping.mapSearchHistoryListToDTO(searchHistoryList), HttpStatus.OK);
-        //return new ResponseEntity<>(searchHistoryService.getSearchHistory(searchRequest), HttpStatus.OK);
+        return new  ResponseEntity<>(Mapping.mapSearchHistoryListToDTO(searchHistoryList, sort), HttpStatus.OK);
     }
 }

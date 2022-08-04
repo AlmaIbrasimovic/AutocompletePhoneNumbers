@@ -7,6 +7,7 @@ import com.example.demo.model.SearchHistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ public class Mapping {
         ).collect(Collectors.toList());
     }
 
-    public static List<SearchHistoryDTO> mapSearchHistoryListToDTO(List<SearchHistory> searchHistoryList) {
+    public static List<SearchHistoryDTO> mapSearchHistoryListToDTO(List<SearchHistory> searchHistoryList, String sortBy) {
         return searchHistoryList.stream().map(
-                searchHistory -> {return mapSearcHistoryToSearchHistoryDTO(searchHistory);
+                searchHistory -> {return mapSearcHistoryToSearchHistoryDTO(searchHistory, sortBy);
                 }
         ).collect(Collectors.toList());
     }
@@ -32,7 +33,7 @@ public class Mapping {
         return new PhoneNumbersDTO(phoneNumber.getName(), phoneNumber.getPhoneNumber());
     }
 
-    public static SearchHistoryDTO mapSearcHistoryToSearchHistoryDTO (SearchHistory searchHistory) {
+    public static SearchHistoryDTO mapSearcHistoryToSearchHistoryDTO (SearchHistory searchHistory, String sortBy) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<PhoneNumbersDTO> phoneNumbers = new ArrayList<>();
 
@@ -41,6 +42,17 @@ public class Mapping {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        if (sortBy != null && (sortBy.equals("name") || sortBy.equals("phoneNumber"))) {
+            JSONArray jsonArr = new JSONArray(searchHistory.getResponse());
+            jsonArr = Sorting.sortJSONArray(jsonArr, sortBy);
+
+            try {
+                phoneNumbers = objectMapper.readValue(jsonArr.toString(), new TypeReference<List<PhoneNumbersDTO>>(){});
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
         return new SearchHistoryDTO(searchHistory.getQuery(), searchHistory.getDate(), searchHistory.getExecutionTime(), phoneNumbers);
     }
 }

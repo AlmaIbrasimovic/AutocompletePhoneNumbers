@@ -22,18 +22,16 @@ public class HistorySearchFactory {
         if (searchRequest.getDate() != null) {
             historySearchCriteria.withDate(searchRequest.getDate());
         }
+
         switch(searchRequest.getOrder()) {
-            case "name":
-                historySearchCriteria.withOrderDefault();
-                break;
-            case "phoneNumber":
-                historySearchCriteria.withOrderPhoneNumber();
-                break;
             case "query":
                 historySearchCriteria.withOrderQuery();
                 break;
             case "executionTime":
                 historySearchCriteria.withOrderExecutionTime();
+                break;
+            default:
+                historySearchCriteria.withOrderDefault();
                 break;
         }
 

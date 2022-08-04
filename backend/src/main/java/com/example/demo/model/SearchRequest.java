@@ -1,17 +1,15 @@
 package com.example.demo.model;
 
-import java.time.LocalDate;
-
 public class SearchRequest {
     private String name;
     private String phoneNumber;
     private String query;
-    private LocalDate date;
+    private String date;
     private Integer pageNumber;
     private Integer pageSize;
     private String order;
 
-    public SearchRequest(String name, String phoneNumber, String query, LocalDate date, Integer pageNumber, Integer pageSize, String order) {
+    public SearchRequest(String name, String phoneNumber, String query, String date, Integer pageNumber, Integer pageSize, String order) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.query = query;
@@ -45,11 +43,11 @@ public class SearchRequest {
         this.query = query;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

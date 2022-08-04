@@ -26,15 +26,11 @@ public class SearchCriteriaBuilder<T> implements ISearchCriteriaBuilder<T> {
     }
 
     public void withOrderDefault() {
-        this.sort = cb.asc(resource.get("date"));
-    }
-
-    public void withOrderPhoneNumber() {
-        this.sort = cb.asc(resource.get("date"));
+        this.sort = cb.asc(resource.get("query"));
     }
 
     public void withOrderQuery() {
-        this.sort = cb.asc(resource.get("date"));
+        this.sort = cb.asc(resource.get("query"));
     }
 
     public void withOrderExecutionTime() {

@@ -3,7 +3,6 @@ import javax.persistence.TypedQuery;
 
 public interface ISearchCriteriaBuilder<T> {
     void withOrderDefault();
-    void withOrderPhoneNumber();
     void withOrderQuery();
     void withOrderExecutionTime();
     void withPageNumber(Integer pageNumber);

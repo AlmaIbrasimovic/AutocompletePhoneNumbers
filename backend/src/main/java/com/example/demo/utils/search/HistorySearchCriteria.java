@@ -1,10 +1,8 @@
 package com.example.demo.utils.search;
 
 import com.example.demo.model.SearchHistory;
-
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.Predicate;
-import java.time.LocalDate;
 
 public class HistorySearchCriteria extends  SearchCriteriaBuilder<SearchHistory> {
 
@@ -25,12 +23,11 @@ public class HistorySearchCriteria extends  SearchCriteriaBuilder<SearchHistory>
     }
 
     public void withQuery(String query) {
-        String searchQuery = "%query%:%" + query + "%";
-        Predicate queryPredicate = cb.like(resource.get("response"), searchQuery);
+        Predicate queryPredicate = cb.like(resource.get("query"), query);
         predicates.add(queryPredicate);
     }
 
-    public void withDate(LocalDate date) {
+    public void withDate(String date) {
         Predicate datePredicate = cb.equal(resource.get("date"), date);
         predicates.add(datePredicate);
     }

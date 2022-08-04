@@ -1,7 +1,5 @@
 package com.example.demo.DTO;
 
-import com.example.demo.model.PhoneNumbers;
-
 public class PhoneNumbersDTO {
     private String name;
     private String phoneNumber;
