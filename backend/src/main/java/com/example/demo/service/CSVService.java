@@ -20,15 +20,17 @@ public class CSVService {
     PhoneNumbersRepository phoneNumbersRepository;
 
     public void save() {
+        System.out.print(phoneNumbersRepository.findAll().size() );
+        if (phoneNumbersRepository.findAll().size() == 0) {
+            try {
+                File resource = new ClassPathResource("phone_numbers_65535.csv").getFile();
+                MultipartFile multipartFile = new MockMultipartFile("phone_numbers_65535.csv", new FileInputStream(resource));
+                List<PhoneNumbers> phoneNumbers = ReadCSV.importCSV(multipartFile.getInputStream());
+                phoneNumbersRepository.saveAll(phoneNumbers);
 
-        try {
-            File resource = new ClassPathResource("phone_numbers_65535.csv").getFile();
-            MultipartFile multipartFile = new MockMultipartFile("phone_numbers_65535.csv", new FileInputStream(resource));
-            List<PhoneNumbers> phoneNumbers = ReadCSV.importCSV(multipartFile.getInputStream());
-            phoneNumbersRepository.saveAll(phoneNumbers);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     public List<PhoneNumbers> getAllPhoneNumbers() {
