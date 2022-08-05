@@ -20,7 +20,6 @@ public class CSVService {
     PhoneNumbersRepository phoneNumbersRepository;
 
     public void save() {
-        System.out.print(phoneNumbersRepository.findAll().size() );
         if (phoneNumbersRepository.findAll().size() == 0) {
             try {
                 File resource = new ClassPathResource("phone_numbers_65535.csv").getFile();
