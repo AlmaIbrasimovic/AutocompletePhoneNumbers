@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -200,4 +201,12 @@ public class PhoneNumbersControllerTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void incorrectSearchQuery() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/v1/phone-numbers/autocomplete")
+                .param("query", "00392A"))
+                .andExpect(content().string("Query format incorrect."))
+                .andExpect(status().isBadRequest());
+   }
 }

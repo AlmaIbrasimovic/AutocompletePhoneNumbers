@@ -6,6 +6,7 @@ import com.example.demo.DTO.PhoneNumbersDTO;
 import com.example.demo.model.PhoneNumbers;
 import com.example.demo.repository.PhoneNumbersRepository;
 import com.example.demo.utils.Mapping;
+import com.example.demo.utils.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,12 @@ public class PhoneNumbersService {
         this.phoneNumbersRepository = phoneNumbersRepository;
     }
 
-    public List<PhoneNumbersDTO> autocompletePhoneNumber (String phoneNumberQuery) {
+    public List<PhoneNumbersDTO> autocompletePhoneNumber (String phoneNumberQuery) throws Exception {
+        phoneNumberQuery = phoneNumberQuery.replaceAll("[^A-Za-z0-9]","");
+        Boolean containsLetters = Regex.containsLetter(phoneNumberQuery);
+        if (containsLetters) {
+            throw new Exception("Query format incorrect.");
+        }
         List<PhoneNumbers> phoneNumbers = phoneNumbersRepository.findByPhoneNumber (phoneNumberQuery);
         return Mapping.mapPhoneNumberListToDTO(phoneNumbers);
     }
